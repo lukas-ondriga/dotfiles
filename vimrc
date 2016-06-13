@@ -8,7 +8,6 @@ call vundle#begin()
 Bundle 'gmarik/vundle'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'a.vim'
-Bundle 'kien/ctrlp.vim'
 Bundle 'DoxygenToolkit.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-endwise'
@@ -25,6 +24,7 @@ Bundle 'bling/vim-airline'
 Bundle 'octol/vim-cpp-enhanced-highlight'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
+Bundle 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -36,6 +36,7 @@ set expandtab
 set number
 set shiftwidth=4
 set softtabstop=4
+set tabstop=4
 set autoindent
 set visualbell
 set noerrorbells
@@ -49,6 +50,10 @@ colorscheme solarized
 set exrc
 set incsearch
 set hlsearch
+
+" Filetype handling
+autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+autocmd Filetype coffee setlocal shiftwidth=2 softtabstop=2
 
 " Turn off backup
 set nobackup
@@ -72,7 +77,6 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 
 " YouCompleteMe options
-le ti:cpp_class_scope_highlight = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -80,18 +84,21 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " Sudo write
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
+" Fuzzy finder
+map <C-p> :FZF<CR>
+
 " Auto indent pasted text
 nnoremap p p=`]<C-o>
 nnoremap P P=`]<C-o>
-
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+autocmd Filetype coffee nnoremap p p
+autocmd Filetype coffee nnoremap P P
 
 " NerdTree options
 map <C-e> :NERDTreeToggle<CR>
 
-" CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o
-let g:ctrlp_regexp = 1
+
+map <C-f> :FufFile **/<CR>
 
 "map <Leader> <Plug>(easymotion-prefix)a
 
@@ -100,8 +107,8 @@ map <C-s> <C-w>s
 map <C-c> <C-w>c
 
 " UtilsSnip
-let g:UltiSnipsExpandTrigger="<C-s>"
-let g:UltiSnipsJumpForwardTrigger="<C-s>"
+let g:UltiSnipsExpandTrigger="<C-e>"
+let g:UltiSnipsJumpForwardTrigger="<C-e>"
 let g:UltiSnipsJumpBackwardTrigger="<C-p>"
 let g:UltiSnipsEditSplit="vertical"
 
@@ -123,12 +130,6 @@ if executable('ag')
     " Use ag over grep
     set grepprg=ag\ --nogroup\ --nocolor
 
-    " Use ag in CtrlP for listing files. Lightning fast and respects
-    ".gitignore
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-    " ag is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching = 0
     command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
 

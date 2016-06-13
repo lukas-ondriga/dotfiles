@@ -52,7 +52,7 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode)
+plugins=(vi-mode)
 
 # User configuration
 
@@ -85,6 +85,21 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+function gc()
+{
+    git checkout "$*";
+    git pull;
+    git submodule update
+}
+
+__complete_git_branch_names () {
+
+  compadd "${(@)${(f)$(git branch -a)}#??}"
+}
+
+compdef __complete_git_branch_names gc
+
 alias start="cd ~/como/comong-software/Docker; ./como_docker.sh como_dev"
 alias stop="cd ~/como/comong-software/Docker; ./como_docker.sh stop como_dev"
 alias update="cd ~/como/comong-software/Docker; ./como_docker.sh rm; ./como_docker.sh como_dev"
@@ -92,10 +107,10 @@ alias stat="git status"
 alias master="cd ~/como/comong-software; git checkout master; git pull origin master; git submodule update"
 alias release="cd ~/como/comong-software; git checkout release-1.0; git pull origin release-1.0; git submodule update"
 alias commit="git commit -a"
-alias push="git push origin `git rev-parse --abbrev-ref HEAD`"
-alias pull="git pull origin `git rev-parse --abbrev-ref HEAD`"
+alias gp="git rev-parse --abbrev-ref HEAD | xargs git push origin"
 alias gui-build="cd ~/como/comong-software/GUI; gulp cleanAll; gulp"
 alias backend-build="cd ~/como/comong-software/Docker; ./build_yocto.sh"
+alias como-build="cd ~/como/comong-software/Docker; ./build_all_clean.sh"
 alias yocto-build="cd ~/como/como-build/; source poky/oe-init-build-env build-comong64-board/"
 alias deploy="cd ~/como/comong-software/Docker; ./deploy_comong.sh"
 alias core-dir="cd ~/como/comong-software/Core"
