@@ -50,6 +50,7 @@ colorscheme solarized
 set exrc
 set incsearch
 set hlsearch
+set autoread
 
 " Filetype handling
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
@@ -71,6 +72,15 @@ let g:solarized_termcolors=256      " use solarized 256 fallback
 
 " Fonts for status bar
 let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#default#section_truncate_width = {
+    \ 'b': 150,
+    \ 'x': 100,
+    \ 'y': 100,
+    \ 'z': 100,
+    \ 'warning': 150,
+    \ 'error': 150,
+    \ }
 
 " Cpp enhanced highlight
 let g:cpp_class_scope_highlight = 1
