@@ -46,7 +46,7 @@ set showcmd
 set hidden
 set so=7
 let mapleader = ","
-colorscheme solarized
+" colorscheme solarized
 set exrc
 set incsearch
 set hlsearch
